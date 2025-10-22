@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Pechay AR Growth Model</title>
+
+    <!-- A-Frame and AR.js libraries -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js"></script>
+
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+      }
+
+      #ui {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 10px 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      #dayValue {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Slider UI -->
+    <div id="ui">
+      🌿 <label for="daySlider">Day: </label>
+      <input type="range" id="daySlider" min="1" max="365" value="1">
+      <span id="dayValue">1</span>
+    </div>
+
+    <!-- AR Scene -->
+    <a-scene embedded arjs>
+      <a-marker preset="hiro">
+        <!-- Simple 3D Pechay model (green cylinder) -->
+        <a-cylinder id="pechay"
+          color="green"
+          height="0.2"
+          radius="0.05"
+          position="0 0 0">
+        </a-cylinder>
+      </a-marker>
+
+      <a-entity camera></a-entity>
+    </a-scene>
+
+    <!-- JavaScript logic -->
+    <script>
+      const plant = document.querySelector('#pechay');
+      const slider = document.querySelector('#daySlider');
+      const dayValue = document.querySelector('#dayValue');
+      const maxDays = 365;
+
+      function growPlant(day) {
+        // Simulate plant height and radius based on day
+        const height = 0.2 + (day / maxDays) * 1.5;  // grows taller
+        const radius = 0.05 + (day / maxDays) * 0.25; // grows wider
+        plant.setAttribute('height', height);
+        plant.setAttribute('radius', radius);
+      }
+
+      // Update on slider input
+      slider.addEventListener('input', () => {
+        const day = parseInt(slider.value);
+        dayValue.textContent = day;
+        growPlant(day);
+      });
+
+      // Initialize
+      growPlant(1);
+    </script>
+  </body>
+</html>
